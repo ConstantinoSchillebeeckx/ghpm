@@ -52,7 +52,26 @@ def common_params(func: Callable) -> Callable:
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
 def cli() -> None:
-    """Get main entrypoint."""
+    """Project management and TODOs with Github issues and discussions.
+
+    \b
+    Examples
+    --------
+
+    \b
+    Confirm CLI is setup and can communicate with Github
+    >>> ghpm debug
+
+    \b
+    Create a TODO (Github issues) with the title 'todo title' & again with a body
+    >>> ghpm todo 'todo title'
+    >>> ghpm todo 'todo title' -b 'body of the todo'
+
+    \b
+    Create a note (Github discussion) with the title 'note title' & again with a body
+    >>> ghpm note 'note title'
+    >>> ghpm note 'note title' -b 'body of the note'
+    """
 
 
 @click.command()
@@ -66,12 +85,12 @@ def debug() -> None:
 @click.command()
 @common_params
 def todo(title: str, open_obj: str, body: str) -> None:
-    r"""Create a TODO as a Github issue.
+    """Create a TODO as a Github issue.
 
     \b
     Examples
     --------
-    >>> python main.py todo 'some title'
+    >>> ghpm todo 'some title'
     """
     payload = {"title": title, "labels": ["todo"], "body": body}
     headers = {
