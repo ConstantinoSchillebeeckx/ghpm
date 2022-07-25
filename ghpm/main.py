@@ -11,16 +11,14 @@ doc - discussion general
 note - discussion idea
 """
 
-import functools
 import os
 import sys
-from typing import Any, Callable
 
 import click
 import requests
 import util
 from loguru import logger
-from util import REPO_NAME, REPO_OWNER, REPO_URL, TOKEN
+from util import common_params, REPO_NAME, REPO_OWNER, REPO_URL, TOKEN
 
 logger.remove()
 fmt = (
@@ -29,25 +27,6 @@ fmt = (
     "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <lvl>{message}</lvl>"
 )
 logger.add(sys.stderr, format=fmt)
-
-
-def common_params(func: Callable) -> Callable:
-    """Get common options/arguments for shared among all commands."""
-
-    @click.argument("title")
-    @click.option(
-        "-o/-n",
-        "--open/--no-open",
-        "open_obj",
-        default=False,
-        help="Whether to open (default) or not open the created TODO",
-    )
-    @click.option("-b", "--body", default=None, help="Optional body text")
-    @functools.wraps(func)
-    def wrapper(*args: Any, **kwargs: Any) -> Callable:
-        return func(*args, **kwargs)
-
-    return wrapper
 
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
@@ -84,7 +63,7 @@ def debug() -> None:
 
 @click.command()
 @common_params
-def todo(title: str, open_obj: str, body: str) -> None:
+def todo(title: str, open_obj: bool, body: str) -> None:
     """Create a TODO as a Github issue.
 
     \b
@@ -106,15 +85,20 @@ def todo(title: str, open_obj: str, body: str) -> None:
 
 @click.command()
 @common_params
-def note(title: str, open_obj: str) -> None:
-    """Create a note as Github discussion.
-
-    https://docs.github.com/en/graphql/reference/objects#discussion
-    """
+def doc(title: str, open_obj: bool, body: str) -> None:
+    """Create a doc as Github discussion, categorized as "General"."""
     util.create_discussion(title=title, open_obj=open_obj, category_name="general")
 
 
+@click.command()
+@common_params
+def note(title: str, open_obj: bool, body: str) -> None:
+    """Create a note as Github discussion, categorized as "Ideas"."""
+    util.create_discussion(title=title, open_obj=open_obj, category_name="ideas")
+
+
 cli.add_command(debug)
+cli.add_command(doc)
 cli.add_command(todo)
 cli.add_command(note)
 

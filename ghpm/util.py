@@ -4,7 +4,7 @@
 import functools
 import os
 from string import Template
-from typing import Any, Dict
+from typing import Any, Callable, Dict
 
 import click
 import requests
@@ -16,6 +16,25 @@ REPO_NAME = config("REPO_NAME")
 REPO = f"{REPO_OWNER}/{REPO_NAME}"
 REPO_URL = f"https://api.github.com/repos/{REPO}"
 TOKEN = config("TOKEN")
+
+
+def common_params(func: Callable) -> Callable:
+    """Get common options/arguments for shared among all commands."""
+
+    @click.argument("title")
+    @click.option(
+        "-o/-n",
+        "--open/--no-open",
+        "open_obj",
+        default=True,
+        help="Whether to open (default) or not open the created Github object",
+    )
+    @click.option("-b", "--body", default=None, help="Optional body text")
+    @functools.wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Callable:
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 def make_request(url: str, headers: dict, auth: Any, request_type: str = "post") -> dict:
@@ -30,7 +49,7 @@ def make_request(url: str, headers: dict, auth: Any, request_type: str = "post")
     return r.json()
 
 
-def create_discussion(title: str, open_obj: str, category_name: str) -> None:
+def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     """Create a discussion.
 
     https://docs.github.com/en/graphql/reference/objects#discussion
@@ -43,12 +62,10 @@ def create_discussion(title: str, open_obj: str, category_name: str) -> None:
     query = Template(
         """
         mutation {
-          # input type: CreateDiscussionInput
             createDiscussion(input: {
                 repositoryId: "$repo_id",
                 categoryId: "$category_id",
                 body: "The body", title: "$title"}) {
-            # response type: CreateDiscussionPayload
             discussion {
               id, url
             }
@@ -56,13 +73,13 @@ def create_discussion(title: str, open_obj: str, category_name: str) -> None:
         }
         """
     ).substitute(repo_id=repo_id, category_id=category_id, title=title)
-    logger.info(f"Creating discussion with {query}")
+    logger.debug(f"Creating discussion with {query}")
     r = requests.post(
         "https://api.github.com/graphql", json={"query": query}, headers=headers, auth=("token", TOKEN)
     )
     d = r.json()
     url = d["data"]["createDiscussion"]["discussion"]["url"]
-    click.echo(f"Created discussion {url}")
+    logger.info(f"Created discussion {url}")
 
     if open_obj:
         os.system(f"open {url}")
