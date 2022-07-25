@@ -22,6 +22,7 @@ from util import (
     common_params,
     DOC_DISCUSSION_CATEGORY,
     NOTE_DISCUSSION_CATEGORY,
+    OPEN_URL,
     REPO_NAME,
     REPO_OWNER,
     REPO_URL,
@@ -105,10 +106,17 @@ def note(title: str, open_obj: bool, body: str) -> None:
     util.create_discussion(title=title, open_obj=open_obj, category_name=NOTE_DISCUSSION_CATEGORY)
 
 
+@click.command()
+def open() -> None:
+    """Open target respository in browser."""
+    os.system(f"open {OPEN_URL}")
+
+
 cli.add_command(debug)
 cli.add_command(doc)
 cli.add_command(todo)
 cli.add_command(note)
+cli.add_command(open)
 
 if __name__ == "__main__":
     cli()
