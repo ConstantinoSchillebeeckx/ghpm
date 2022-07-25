@@ -18,7 +18,15 @@ import click
 import requests
 import util
 from loguru import logger
-from util import common_params, REPO_NAME, REPO_OWNER, REPO_URL, TOKEN
+from util import (
+    common_params,
+    DOC_DISCUSSION_CATEGORY,
+    NOTE_DISCUSSION_CATEGORY,
+    REPO_NAME,
+    REPO_OWNER,
+    REPO_URL,
+    TOKEN,
+)
 
 logger.remove()
 fmt = (
@@ -87,14 +95,14 @@ def todo(title: str, open_obj: bool, body: str) -> None:
 @common_params
 def doc(title: str, open_obj: bool, body: str) -> None:
     """Create a doc as Github discussion, categorized as "General"."""
-    util.create_discussion(title=title, open_obj=open_obj, category_name="general")
+    util.create_discussion(title=title, open_obj=open_obj, category_name=DOC_DISCUSSION_CATEGORY)
 
 
 @click.command()
 @common_params
 def note(title: str, open_obj: bool, body: str) -> None:
     """Create a note as Github discussion, categorized as "Ideas"."""
-    util.create_discussion(title=title, open_obj=open_obj, category_name="ideas")
+    util.create_discussion(title=title, open_obj=open_obj, category_name=NOTE_DISCUSSION_CATEGORY)
 
 
 cli.add_command(debug)
