@@ -8,6 +8,7 @@ Lightweight CLI for creating Github objects (e.g. issues) that help with project
 * create a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with `XXX` & `YYY` scope
 * create `.env` file like
 
+TODO update below
 ```
 TOKEN=YOUR_SECRET_PAT
 REPO_OWNER=YOUR_GITHUB_USERNAME

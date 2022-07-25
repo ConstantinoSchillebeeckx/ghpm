@@ -18,6 +18,7 @@ REPO_URL = f"https://api.github.com/repos/{REPO}"
 TOKEN = config("TOKEN")
 DOC_DISCUSSION_CATEGORY = config("DOC_DISCUSSION_CATEGORY", "general")
 NOTE_DISCUSSION_CATEGORY = config("NOTE_DISCUSSION_CATEGORY", "ideas")
+OPEN_URL = config("OPEN_URL", f"https://github.com/{REPO}")
 
 
 def common_params(func: Callable) -> Callable:
