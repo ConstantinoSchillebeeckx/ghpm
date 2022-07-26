@@ -17,7 +17,7 @@ import click
 import requests
 from loguru import logger
 
-from .util import (
+from ghpm.util import (
     common_params,
     create_discussion,
     DOC_DISCUSSION_CATEGORY,
