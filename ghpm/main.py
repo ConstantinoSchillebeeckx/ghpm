@@ -12,15 +12,16 @@ note - discussion idea
 """
 
 import os
-import sys
 
 import click
 import requests
-import util
 from loguru import logger
-from util import (
+
+from .util import (
     common_params,
+    create_discussion,
     DOC_DISCUSSION_CATEGORY,
+    make_request,
     NOTE_DISCUSSION_CATEGORY,
     OPEN_URL,
     REPO_NAME,
@@ -28,14 +29,6 @@ from util import (
     REPO_URL,
     TOKEN,
 )
-
-logger.remove()
-fmt = (
-    "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
-    "<level>{level: <8}</level> | "
-    "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <lvl>{message}</lvl>"
-)
-logger.add(sys.stderr, format=fmt)
 
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
@@ -66,7 +59,7 @@ def cli() -> None:
 def debug() -> None:
     """Check the connection to Github."""
     headers = {"Accept": "application/vnd.github+json"}
-    util.make_request(REPO_URL, headers, ("token", TOKEN), "get")
+    make_request(REPO_URL, headers, ("token", TOKEN), "get")
     logger.info(f"Setup successful for {REPO_OWNER=} in {REPO_NAME=}")
 
 
@@ -96,14 +89,14 @@ def todo(title: str, open_obj: bool, body: str) -> None:
 @common_params
 def doc(title: str, open_obj: bool, body: str) -> None:
     """Create a doc as Github discussion, categorized as "General"."""
-    util.create_discussion(title=title, open_obj=open_obj, category_name=DOC_DISCUSSION_CATEGORY)
+    create_discussion(title=title, open_obj=open_obj, category_name=DOC_DISCUSSION_CATEGORY)
 
 
 @click.command()
 @common_params
 def note(title: str, open_obj: bool, body: str) -> None:
     """Create a note as Github discussion, categorized as "Ideas"."""
-    util.create_discussion(title=title, open_obj=open_obj, category_name=NOTE_DISCUSSION_CATEGORY)
+    create_discussion(title=title, open_obj=open_obj, category_name=NOTE_DISCUSSION_CATEGORY)
 
 
 @click.command()
