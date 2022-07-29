@@ -6,7 +6,7 @@ import os
 
 from setuptools import find_packages, setup
 
-DEPENDENCIES = ["Click", "python-decouple", "loguru"]
+DEPENDENCIES = ["Click", "python-decouple", "loguru", "requests"]
 EXCLUDE_FROM_PACKAGES = []
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 VERSION = "0.1.0"
@@ -25,11 +25,9 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
     install_requires=DEPENDENCIES,
-    include_package_data=True,
     keywords=[],
     scripts=[],
     entry_points={"console_scripts": ["ghpm=ghpm.main:cli"]},
-    # entry_points={"console_scripts": ["pycowsay=pycowsay.main:main"]},
     zip_safe=False,
     python_requires=">=3.9",
     classifiers=[
