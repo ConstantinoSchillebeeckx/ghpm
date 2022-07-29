@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "todo"
+name = "ghpm"
 version = "0.1.0"
 description = "Work TODO and project management"
 authors = ["Constantino Schillebeeckx <constantino.schillebeeckx@gmail.com>"]
