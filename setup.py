@@ -1,16 +1,36 @@
 # -*- coding: utf-8 -*-
 """Install library with `python setup.py install` or `python setup.py develop`."""
+
+import io
+import os
+
 from setuptools import find_packages, setup
+
+DEPENDENCIES = ["Click", "python-decouple", "loguru", "requests"]
+EXCLUDE_FROM_PACKAGES = []
+CURDIR = os.path.abspath(os.path.dirname(__file__))
+VERSION = "0.1.0"
+
+with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
+    README = f.read()
+
 
 setup(
     name="ghpm",
-    version="0.1.0",
-    packages=find_packages(),
+    version=VERSION,
+    author="Constantino Schillebeeckx",
     include_package_data=True,
-    install_requires=["Click", "python-decouple", "loguru"],
-    entry_points={
-        "console_scripts": [
-            "ghpm = ghpm.main:cli",
-        ],
-    },
+    description="",
+    long_description=README,
+    long_description_content_type="text/markdown",
+    packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+    install_requires=DEPENDENCIES,
+    keywords=[],
+    scripts=[],
+    entry_points={"console_scripts": ["ghpm=ghpm.main:cli"]},
+    zip_safe=False,
+    python_requires=">=3.9",
+    classifiers=[
+        "Programming Language :: Python",
+    ],
 )
