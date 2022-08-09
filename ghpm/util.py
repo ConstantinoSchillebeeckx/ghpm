@@ -16,8 +16,8 @@ GHPM_REPO_NAME = config("GHPM_REPO_NAME")
 GHPM_REPO = f"{GHPM_REPO_OWNER}/{GHPM_REPO_NAME}"
 GHPM_REPO_URL = f"https://api.github.com/repos/{GHPM_REPO}"
 GHPM_PAT = config("GHPM_PAT")
-GHPM_DOC_DISCUSSION_CATEGORY = config("GHPM_DOC_DISCUSSION_CATEGORY", "general")
-GHPM_NOTE_DISCUSSION_CATEGORY = config("GHPM_NOTE_DISCUSSION_CATEGORY", "ideas")
+GHPM_DOC_CAT = config("GHPM_DOC_CAT", "general")
+GHPM_NOTE_CAT = config("GHPM_NOTE_CAT", "ideas")
 GHPM_OPEN_URL = config("GHPM_OPEN_URL", f"https://github.com/{GHPM_REPO}")
 
 

@@ -8,7 +8,8 @@ from loguru import logger
 logger.remove()
 
 
-def formatter(record):
+def formatter(record: dict) -> str:
+    """Dynamic log formatter."""
     if record["level"].name == "DEBUG":
         return (
             "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
