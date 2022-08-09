@@ -11,14 +11,14 @@ import requests
 from decouple import config
 from loguru import logger
 
-REPO_OWNER = config("REPO_OWNER")
-REPO_NAME = config("REPO_NAME")
-REPO = f"{REPO_OWNER}/{REPO_NAME}"
-REPO_URL = f"https://api.github.com/repos/{REPO}"
-TOKEN = config("TOKEN")
-DOC_DISCUSSION_CATEGORY = config("DOC_DISCUSSION_CATEGORY", "general")
-NOTE_DISCUSSION_CATEGORY = config("NOTE_DISCUSSION_CATEGORY", "ideas")
-OPEN_URL = config("OPEN_URL", f"https://github.com/{REPO}")
+GHPM_REPO_OWNER = config("GHPM_REPO_OWNER")
+GHPM_REPO_NAME = config("GHPM_REPO_NAME")
+GHPM_REPO = f"{GHPM_REPO_OWNER}/{GHPM_REPO_NAME}"
+GHPM_REPO_URL = f"https://api.github.com/repos/{GHPM_REPO}"
+GHPM_PAT = config("GHPM_PAT")
+GHPM_DOC_DISCUSSION_CATEGORY = config("GHPM_DOC_DISCUSSION_CATEGORY", "general")
+GHPM_NOTE_DISCUSSION_CATEGORY = config("GHPM_NOTE_DISCUSSION_CATEGORY", "ideas")
+GHPM_OPEN_URL = config("GHPM_OPEN_URL", f"https://github.com/{GHPM_REPO}")
 
 
 def common_params(func: Callable) -> Callable:
@@ -78,7 +78,7 @@ def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     ).substitute(repo_id=repo_id, category_id=category_id, title=title)
     logger.debug(f"Creating discussion with {query}")
     r = requests.post(
-        "https://api.github.com/graphql", json={"query": query}, headers=headers, auth=("token", TOKEN)
+        "https://api.github.com/graphql", json={"query": query}, headers=headers, auth=("token", GHPM_PAT)
     )
     d = r.json()
     url = d["data"]["createDiscussion"]["discussion"]["url"]
@@ -119,6 +119,6 @@ def get_repo() -> dict:
         }
     }
     }"""
-    ).substitute(repo_owner=REPO_OWNER, repo_name=REPO_NAME)
-    r = requests.post("https://api.github.com/graphql", json={"query": query}, auth=("token", TOKEN))
+    ).substitute(repo_owner=GHPM_REPO_OWNER, repo_name=GHPM_REPO_NAME)
+    r = requests.post("https://api.github.com/graphql", json={"query": query}, auth=("token", GHPM_PAT))
     return r.json()
