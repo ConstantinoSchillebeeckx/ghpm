@@ -20,14 +20,14 @@ from loguru import logger
 from ghpm.util import (
     common_params,
     create_discussion,
-    DOC_DISCUSSION_CATEGORY,
+    GHPM_DOC_DISCUSSION_CATEGORY,
+    GHPM_NOTE_DISCUSSION_CATEGORY,
+    GHPM_OPEN_URL,
+    GHPM_PAT,
+    GHPM_REPO_NAME,
+    GHPM_REPO_OWNER,
+    GHPM_REPO_URL,
     make_request,
-    NOTE_DISCUSSION_CATEGORY,
-    OPEN_URL,
-    REPO_NAME,
-    REPO_OWNER,
-    REPO_URL,
-    TOKEN,
 )
 
 
@@ -59,8 +59,13 @@ def cli() -> None:
 def debug() -> None:
     """Check the connection to Github."""
     headers = {"Accept": "application/vnd.github+json"}
-    make_request(REPO_URL, headers, ("token", TOKEN), "get")
-    logger.info(f"Setup successful for {REPO_OWNER=} in {REPO_NAME=}")
+    make_request(GHPM_REPO_URL, headers, ("token", GHPM_PAT), "get")
+    logger.info(f"{GHPM_REPO_OWNER=}")
+    logger.info(f"{GHPM_REPO_NAME=}")
+    logger.info(f"{GHPM_DOC_DISCUSSION_CATEGORY=}")
+    logger.info(f"{GHPM_NOTE_DISCUSSION_CATEGORY=}")
+    logger.info(f"{GHPM_OPEN_URL=}")
+    logger.info("Setup successful!")
 
 
 @click.command()
@@ -77,7 +82,7 @@ def todo(title: str, open_obj: bool, body: str) -> None:
     headers = {
         "Accept": "application/vnd.github+json",
     }
-    r = requests.post(f"{REPO_URL}/issues", json=payload, headers=headers, auth=("token", TOKEN))
+    r = requests.post(f"{GHPM_REPO_URL}/issues", json=payload, headers=headers, auth=("token", GHPM_PAT))
     d = r.json()
     logger.info(f"Created issue {d['html_url']}")
 
@@ -89,20 +94,20 @@ def todo(title: str, open_obj: bool, body: str) -> None:
 @common_params
 def doc(title: str, open_obj: bool, body: str) -> None:
     """Create a doc as Github discussion, categorized as "General"."""
-    create_discussion(title=title, open_obj=open_obj, category_name=DOC_DISCUSSION_CATEGORY)
+    create_discussion(title=title, open_obj=open_obj, category_name=GHPM_DOC_DISCUSSION_CATEGORY)
 
 
 @click.command()
 @common_params
 def note(title: str, open_obj: bool, body: str) -> None:
     """Create a note as Github discussion, categorized as "Ideas"."""
-    create_discussion(title=title, open_obj=open_obj, category_name=NOTE_DISCUSSION_CATEGORY)
+    create_discussion(title=title, open_obj=open_obj, category_name=GHPM_NOTE_DISCUSSION_CATEGORY)
 
 
 @click.command()
 def open() -> None:
     """Open target respository in browser."""
-    os.system(f"open {OPEN_URL}")
+    os.system(f"open {GHPM_OPEN_URL}")
 
 
 cli.add_command(debug)

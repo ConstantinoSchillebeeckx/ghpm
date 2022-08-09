@@ -21,9 +21,9 @@ To configure the CLI, set the ENVIRONMENT variables show in the table below.
 
 | Variable | Description | Required | Example |
 | -------- | ----------- | :-----: | -------- |
-| TOKEN    | Github PAT created during setup | :white_check_mark: | ghp_SLFDJSDFLKSD123098CszKLjf |
-| REPO_OWNER         | The name of your Github user | :white_check_mark: | ConstantinoSchillebeeckx |
-| REPO_NAME         | The name of the repo in which objects will be created | :white_check_mark: | work_todo |
-| OPEN_URL | The URL that's opened when executing the `open` CLI command. | NO - defaults to `https://github.com/{REPO}` where `{REPO}` is `{REPO_OWNER}/{REPO_NAME}` | |
-| DOC_DISCUSSION_CATEGORY | The discussions category under which a **doc** will be created | NO - defaults to `general` | |
-| NOTE_DISCUSSION_CATEGORY | The discussions category under which a **note** will be created | NO - defaults to `ideas` | |
+| GHPM_PAT | Github PAT created during setup | :white_check_mark: | ghp_SLFDJSDFLKSD123098CszKLjf |
+| GHPM_REPO_OWNER | The name of your Github user | :white_check_mark: | ConstantinoSchillebeeckx |
+| GHPM_REPO_NAME | The name of the repo in which objects will be created | :white_check_mark: | work_todo |
+| GHPM_OPEN_URL | The URL that's opened when executing the `open` CLI command. | Not required - defaults to `https://github.com/{REPO}` where `{REPO}` is `{REPO_OWNER}/{REPO_NAME}` | |
+| GHPM_DOC_DISCUSSION_CATEGORY | The discussions category under which a **doc** will be created | Not required - defaults to `general` | |
+| GHPM_NOTE_DISCUSSION_CATEGORY | The discussions category under which a **note** will be created | Not required - defaults to `ideas` | |
