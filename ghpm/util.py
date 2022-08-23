@@ -3,6 +3,7 @@
 
 import functools
 import os
+import time
 from string import Template
 from typing import Any, Callable, Dict
 
@@ -52,6 +53,25 @@ def make_request(url: str, headers: dict, auth: Any, request_type: str = "post")
     return r.json()
 
 
+def open_url(url: str) -> None:
+    """Open URL."""
+    time.sleep(0.1)  # prevent race condition with API and browser
+    os.system(f"open {url}")
+
+
+def create_todo(title: str, open_obj: bool, body: str = None) -> None:
+    payload = {"title": title, "labels": ["todo"], "body": body}
+    headers = {
+        "Accept": "application/vnd.github+json",
+    }
+    r = requests.post(f"{GHPM_REPO_URL}/issues", json=payload, headers=headers, auth=("token", GHPM_PAT))
+    d = r.json()
+    logger.info(f"Created issue {d['html_url']}")
+
+    if open_obj:
+        open_url(d["html_url"])
+
+
 def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     """Create a discussion.
 
@@ -59,7 +79,7 @@ def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     """
     repo_id = get_repo_id()
     discussions = get_discussion_categories()
-    category_id = discussions["general"]
+    category_id = discussions[category_name.lower()]
 
     headers: Dict[str, str] = {}
     query = Template(
@@ -85,7 +105,7 @@ def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     logger.info(f"Created discussion {url}")
 
     if open_obj:
-        os.system(f"open {url}")
+        open_url(url)
 
 
 def get_repo_id() -> str:

@@ -4,12 +4,12 @@
 import os
 
 import click
-import requests
 from loguru import logger
 
 from ghpm.util import (
     common_params,
     create_discussion,
+    create_todo,
     GHPM_DOC_CAT,
     GHPM_NOTE_CAT,
     GHPM_OPEN_URL,
@@ -82,16 +82,7 @@ def todo(title: str, open_obj: bool, body: str) -> None:
     >>> ghpm todo 'todo title'
     >>> ghpm todo 'todo title' -b 'body of the todo'
     """
-    payload = {"title": title, "labels": ["todo"], "body": body}
-    headers = {
-        "Accept": "application/vnd.github+json",
-    }
-    r = requests.post(f"{GHPM_REPO_URL}/issues", json=payload, headers=headers, auth=("token", GHPM_PAT))
-    d = r.json()
-    logger.info(f"Created issue {d['html_url']}")
-
-    if open_obj:
-        os.system(f"open {d['html_url']}")
+    create_todo(title=title, open_obj=open_obj, body=body)
 
 
 @click.command()
