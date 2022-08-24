@@ -73,7 +73,7 @@ def create_todo(title: str, open_obj: bool, body: str = None) -> None:
         open_url(d["html_url"])
 
 
-def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
+def create_discussion(title: str, open_obj: bool, body: str, category_name: str) -> None:
     """Create a discussion.
 
     https://docs.github.com/en/graphql/reference/objects#discussion
@@ -81,6 +81,7 @@ def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
     repo_id = get_repo_id()
     discussions = get_discussion_categories()
     category_id = discussions[category_name.lower()]
+    body = body if body else "TODO"
 
     headers: Dict[str, str] = {}
     query = Template(
@@ -89,14 +90,14 @@ def create_discussion(title: str, open_obj: bool, category_name: str) -> None:
             createDiscussion(input: {
                 repositoryId: "$repo_id",
                 categoryId: "$category_id",
-                body: "The body", title: "$title"}) {
+                body: "$body", title: "$title"}) {
             discussion {
               id, url
             }
           }
         }
         """
-    ).substitute(repo_id=repo_id, category_id=category_id, title=title)
+    ).substitute(repo_id=repo_id, category_id=category_id, title=title, body=body)
     logger.debug(f"Creating discussion with {query}")
     r = requests.post(
         "https://api.github.com/graphql", json={"query": query}, headers=headers, auth=("token", GHPM_PAT)

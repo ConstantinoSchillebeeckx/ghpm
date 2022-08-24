@@ -97,7 +97,7 @@ def doc(title: str, open_obj: bool, body: str) -> None:
     >>> ghpm doc 'doc title'
     >>> ghpm doc 'doc title' -b 'body of the doc'
     """
-    create_discussion(title=title, open_obj=open_obj, category_name=GHPM_DOC_CAT)
+    create_discussion(title=title, open_obj=open_obj, body=body, category_name=GHPM_DOC_CAT)
 
 
 @click.command()
@@ -112,7 +112,7 @@ def note(title: str, open_obj: bool, body: str) -> None:
     >>> ghpm note 'note title'
     >>> ghpm note 'note title' -b 'body of the note'
     """
-    create_discussion(title=title, open_obj=open_obj, category_name=GHPM_NOTE_CAT)
+    create_discussion(title=title, open_obj=open_obj, body=body, category_name=GHPM_NOTE_CAT)
 
 
 @click.command()
