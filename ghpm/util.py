@@ -60,7 +60,8 @@ def open_url(url: str) -> None:
 
 
 def create_todo(title: str, open_obj: bool, body: str = None) -> None:
-    payload = {"title": title, "labels": ["todo"], "body": body}
+    """Create a todo with a title and body."""
+    payload = {"title": title, "body": body}
     headers = {
         "Accept": "application/vnd.github+json",
     }
